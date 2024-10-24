@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        animation: 2s;
+    }
+
+
+    .sliders {
+        width: 100%;
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+    }
+
+    .sliders::-webkit-scrollbar {
+        display: none;
+    }
+
+    .sliders .slide {
+        scroll-snap-align: center;
+        height: 300px;
+        min-width: calc(100% - 20px);
+        background-color: green;
+        margin: 10px;
+        border-radius: 10px;
+    }
+
+    .bullets {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin: 10px;
+    }
+
+    .bullets .bullet {
+        height: 10px;
+        width: 10px;
+        background-color: rgb(228, 228, 228);
+        border-radius: 50%;
+    }
+
+    .bullets .bullet.active {
+        background-color: red;
+    }
+
+
+
+    .slider {
+        position: relative;
+    }
+
+    .slider .left,
+    .slider .right {
+        position: absolute;
+        top: 40%;
+        height: 35px;
+        width: 35px;
+        background-color: black;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .slider .left {
+        left: 10px;
+    }
+
+    .slider .right {
+        right: 10px;
+    }
+</style>
+
+
+
+<body>
+
+
+    <div class="slider">
+
+        <div class="left" onclick="scrollSliderManual('left')">
+            &#10094;
+        </div>
+
+        <div class="right" onclick="scrollSliderManual('right')">
+            &#10095;
+        </div>
+
+        <div class="sliders" id="sliders">
+
+            <div class="slide">
+            </div>
+
+            <div class="slide">
+
+            </div>
+
+            <div class="slide">
+
+            </div>
+
+            <div class="slide">
+
+            </div>
+
+            <div class="slide">
+
+            </div>
+
+            <div class="slide">
+
+            </div>
+
+        </div>
+
+        <div class="bullets" id="bullets">
+
+        </div>
+
+    </div>
+
+    <script>
+
+        let slider_container = document.querySelector("#sliders");
+        let total_slides = slider_container.children.length;
+
+        let slide_width = slider_container.children[0];
+        slide_width = slide_width.getBoundingClientRect().width;
+
+
+        let position = 0;
+        let isManual = false;
+
+        function scrollSlider(dir) {
+            if (dir == "left") {
+                if (position == 0) {
+                    position = total_slides - 1;
+                } else {
+                    position--;
+                }
+            } else {
+
+                if (position == total_slides - 1) {
+                    position = 0;
+                } else {
+                    position++;
+                }
+            }
+            swipe();
+        }
+
+        function swipe() {
+            slider_container.scrollLeft = position * slide_width;
+        }
+
+
+
+        // ======================= Manual Scrolling ----------
+
+        function scrollSliderManual(dir) {
+            isManual = true;
+            scrollSlider(dir);
+        }
+
+        // ======================= Auto Scrolling ----------
+
+        autoScroll();
+
+        function autoScroll() {
+            let interval = setInterval(() => {
+                if (isManual) {
+                    isManual = false;
+                } else {
+                    scrollTime();
+                }
+            }, 2000);
+        }
+
+        function scrollTime() {
+            scrollSlider("right");
+        }
+
+    </script>
+
+
+</body>
+
+</html>
